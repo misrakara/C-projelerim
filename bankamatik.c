@@ -65,6 +65,6 @@ int main()
 	
 	else{
 		printf("Yanlis secim yaptiniz.");
-		printf("Bizi tercih ettiginiz icin tesekkür ederiz,iyi gunler.");
+		printf("Bizi tercih ettiginiz icin tesekkur ederiz,iyi gunler.");
 	}
 }
