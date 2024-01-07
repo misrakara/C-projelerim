@@ -3,48 +3,50 @@
 
 /*ikili bir agacin dugum sayisini bulmak*/
 
-typedef struct node{
+struct node{
 	int data;
 	struct node *left;
 	struct node *right;
 	
-}BTREE;
+};
+
+typedef struct node *BTREE;
 
 
 
-BTREE *new_node(int data){
-	BTREE *p=(BTREE*)malloc(sizeof(BTREE));
-	p->data=data;
-	p->left=NULL;
-	p->right=NULL;
-	
+BTREE new_node(int x){
+	BTREE p;
+	p=(BTREE)malloc(sizeof(struct node));
+	p->data=x;
+	p->left=p->right=NULL;	
 	return p;
 	
 	
 }
 
-BTREE *insert(BTREE *root,int data){
-	if(root!=NULL){
-		if(data< root->data)
-			root->left=insert(root->left,data);
-			
+BTREE insert(BTREE root,int x){
+	if(root==NULL)
+		root=new_node(x);
+	
+	else{
+		if(x< root->data)
+			root->left=insert(root->left,x);
 		else
-			root->right=insert(root->right,data);
-	}else
-		root=new_node(data);
+			root->right=insert(root->right,x);
+	}
 		
 	return root;
 }
 
-void preorder(BTREE *root){
+void inorder(BTREE root){
 	if(root!=NULL){
-		printf("%d",root->data);
-		preorder(root->left);
-		preorder(root->right);
+		inorder(root->left);
+		printf("%3d",root->data);
+		inorder(root->right);
 	}
 }
 
-int size(BTREE *root){
+int size(BTREE root){
 	if(root==NULL)
 			return 0;
 	
@@ -53,22 +55,45 @@ int size(BTREE *root){
 	
 	
 }
+
+void mirror(BTREE root){
+	if(root==NULL)
+		return;
+	
+	else{
+		struct node *temp;
+		temp=root->left;
+		root->left=root->right;
+		root->right=temp;
+		mirror(root->left);
+		mirror(root->right);
+	}
+}
+
 int main(){
-	BTREE *root=NULL;
+	BTREE myroot=NULL;
+	int nodeCount;
 	int i;
 	printf("Agaca eklenecek verileri giriniz:\n",i);
-	do{
+	scanf("%d",&i);
+	while(i!=-1){
+		myroot=insert(myroot,i);
 		scanf("%d",&i);
-		if(i!=-1)
-			root=insert(root,i);
-			
-	}while(i!=-1);
+	}
 	
-	printf("Olusturdugunuz Binary Agaci:\t");
-	preorder(root);
+	printf("Olusturdugunuz ineorder binary agaci:\t");
+	inorder(myroot);
 	printf("\n");
 	
-	int nodeCount=size(root);
-	printf("Agactaki dugum sayisi: ",nodeCount);
+	printf("Agactaki dugum sayisi:%d\n",size(myroot));
+	
+	printf("Degistireceginiz veriyi giriniz:\n");
+	mirror(myroot);
+	scanf("%d",&i);
+
+	printf("Olusturdugunuz yeni ineorder binary agaci:\t");
+	inorder(myroot);
+	printf("\n");
+	
 	
 }
